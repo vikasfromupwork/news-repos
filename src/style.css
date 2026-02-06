@@ -1,0 +1,130 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #0f172a;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+#app {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* News Repos shared UI – mobile first */
+.nr-card {
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  padding: 1rem 1.1rem;
+}
+@media (min-width: 480px) {
+  .nr-card {
+    padding: 1.1rem 1.25rem;
+  }
+}
+
+.nr-card h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.35rem;
+}
+
+.nr-card h3 {
+  font-size: 0.95rem;
+  margin: 0 0 0.35rem;
+}
+
+.nr-muted {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.nr-btn {
+  border-radius: 999px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.65rem 1.15rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nr-btn-primary {
+  background: linear-gradient(135deg, #0ea5e9, #059669);
+  color: #fff;
+}
+
+.nr-btn-ghost {
+  background: transparent;
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+.nr-form {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.nr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+}
+
+.nr-field span {
+  color: #cbd5e1;
+}
+
+.nr-form input,
+.nr-form select,
+.nr-form textarea {
+  border-radius: 0.6rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  color: #e2e8f0;
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+}
+.nr-form textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.nr-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.nr-form-actions .nr-btn {
+  margin-top: 0;
+  flex: 1;
+  min-width: 120px;
+}
