@@ -47,14 +47,14 @@ onMounted(async () => {
         const text = (data && data.text) || ''
         const title = (data && data.title) || ''
         if (!url && text && (text.startsWith('http://') || text.startsWith('https://'))) url = text.trim()
-        if (url) {
-          addSharedArticle({ url, title, text })
+        if (url || title || text) {
+          addSharedArticle({ url: url || '', title, text })
         }
       }
     } catch (_) {
-      if (sharedUrlFromQuery) {
+      if (sharedUrlFromQuery || params.get('title') || params.get('text')) {
         addSharedArticle({
-          url: sharedUrlFromQuery,
+          url: sharedUrlFromQuery || '',
           title: params.get('title') || '',
           text: params.get('text') || '',
         })
@@ -62,9 +62,9 @@ onMounted(async () => {
     }
     window.history.replaceState({}, '', '/')
     router.replace('/')
-  } else if (sharedUrlFromQuery) {
+  } else if (sharedUrlFromQuery || params.get('title') || params.get('text')) {
     addSharedArticle({
-      url: sharedUrlFromQuery,
+      url: sharedUrlFromQuery || '',
       title: params.get('title') || '',
       text: params.get('text') || '',
     })

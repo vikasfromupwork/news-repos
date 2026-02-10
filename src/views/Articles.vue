@@ -18,7 +18,7 @@ function remove(id) {
     <section class="nr-card nr-card-table">
       <h2>Articles</h2>
       <p class="nr-muted">
-        Articles you added or shared into News Repos. Tap to open the link.
+        Links and content you shared from any app (Facebook, Twitter, browsers, etc.). Tap a link to open.
       </p>
       <div v-if="sharedArticles.length" class="nr-table-wrap">
         <div class="nr-table-header">
@@ -32,6 +32,7 @@ function remove(id) {
           class="nr-table-row"
         >
           <a
+            v-if="a.url"
             :href="a.url"
             target="_blank"
             rel="noopener noreferrer"
@@ -40,6 +41,10 @@ function remove(id) {
             <span class="nr-row-title">{{ a.title || 'No title' }}</span>
             <span class="nr-row-url">{{ a.url }}</span>
           </a>
+          <div v-else class="nr-row-link nr-row-link-text">
+            <span class="nr-row-title">{{ a.title || a.text || 'Shared content' }}</span>
+            <span v-if="a.title && a.text" class="nr-row-url">{{ a.text }}</span>
+          </div>
           <span class="nr-row-date">{{ new Date(a.sharedAt).toLocaleDateString() }}</span>
           <button
             type="button"
@@ -103,6 +108,13 @@ function remove(id) {
   min-width: 0;
   -webkit-tap-highlight-color: transparent;
   padding: 0.2rem 0;
+}
+.nr-row-link-text {
+  cursor: default;
+}
+.nr-row-link-text .nr-row-url {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .nr-row-title {
   font-weight: 500;

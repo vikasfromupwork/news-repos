@@ -62,10 +62,11 @@ async function pasteAndSave() {
 
     <section v-if="sharedArticles.length" class="nr-card nr-card-list">
       <h3>Shared into News Repos</h3>
-      <p class="nr-muted">Articles you shared to this app. Open any time.</p>
+      <p class="nr-muted">Content you shared from any app (Facebook, Twitter, etc.). Open links anytime.</p>
       <ul class="nr-article-list">
         <li v-for="a in sharedArticles" :key="a.id" class="nr-article-item">
           <a
+            v-if="a.url"
             :href="a.url"
             target="_blank"
             rel="noopener noreferrer"
@@ -74,6 +75,10 @@ async function pasteAndSave() {
             <span class="nr-article-title">{{ a.title || 'Untitled' }}</span>
             <span class="nr-article-url">{{ a.url }}</span>
           </a>
+          <div v-else class="nr-article-link nr-article-link-text">
+            <span class="nr-article-title">{{ a.title || a.text || 'Shared content' }}</span>
+            <span v-if="a.title && a.text" class="nr-article-url">{{ a.text }}</span>
+          </div>
         </li>
       </ul>
       <button class="nr-btn nr-btn-ghost" @click="router.push('/articles')">
@@ -82,10 +87,9 @@ async function pasteAndSave() {
     </section>
 
     <section v-else class="nr-card">
-      <h3>No shared articles yet</h3>
+      <h3>No shared content yet</h3>
       <p class="nr-muted">
-        When you share a news link to News Repos from Chrome or another app, it
-        will appear here when you open the app.
+        Share a link or text from any app (Facebook, Twitter, Chrome, etc.) and choose “News Repos” in the share list. It will appear here.
       </p>
       <button class="nr-btn nr-btn-ghost" @click="router.push('/articles')">
         Go to Articles
@@ -151,6 +155,13 @@ async function pasteAndSave() {
   text-decoration: none;
   padding: 0.15rem 0;
   -webkit-tap-highlight-color: transparent;
+}
+.nr-article-link-text {
+  cursor: default;
+}
+.nr-article-link-text .nr-article-url {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .nr-article-title {
   font-weight: 600;

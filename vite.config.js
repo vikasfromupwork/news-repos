@@ -17,12 +17,12 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.js',
       manifest: {
-        id: '/news-repos-v2',
+        id: '/',
         scope: '/',
         name: 'News Repos',
-        short_name: 'NewsRepos',
-        description: 'News Repos PWA demo.',
-        theme_color: '#f9c400',
+        short_name: 'News Repos',
+        description: 'Save articles and links from any app. Share from Facebook, Twitter, browsers, and more.',
+        theme_color: '#0f172a',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
@@ -31,8 +31,10 @@ export default defineConfig({
             src: '/news-icon.svg',
             sizes: '512x512',
             type: 'image/svg+xml',
+            purpose: 'any',
           },
         ],
+        // Accepts shares from any app (links, text, or both). GET = opens URL with query params.
         share_target: {
           action: '/share-target',
           method: 'GET',

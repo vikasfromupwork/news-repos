@@ -41,18 +41,18 @@ self.addEventListener('fetch', (event) => {
   const origin = url.origin
   const fullPendingUrl = origin + SHARE_PENDING_URL
 
-  // GET /share-target?url=...&title=...&text=... (Chrome opens this when user shares to our PWA)
-  // On Android, "url" is often empty – the link comes in "text" or "title".
+  // GET /share-target – accept any share (link, text, or both) from any app (Facebook, Twitter, etc.)
   const isShareTarget = url.pathname === '/share-target' || url.pathname === '/share-target/'
   if (event.request.method === 'GET' && isShareTarget) {
     const urlParam = url.searchParams.get('url') || ''
-    const title = url.searchParams.get('title') || ''
-    const text = url.searchParams.get('text') || ''
+    const title = (url.searchParams.get('title') || '').trim()
+    const text = (url.searchParams.get('text') || '').trim()
     const sharedUrl = resolveSharedUrl(urlParam, title, text)
-    if (sharedUrl) {
+    const hasContent = sharedUrl || title || text
+    if (hasContent) {
       event.respondWith(
         (async () => {
-          const payload = { url: sharedUrl, title, text }
+          const payload = { url: sharedUrl || '', title, text }
           const cache = await caches.open(SHARE_PENDING_CACHE)
           await cache.put(
             fullPendingUrl,
@@ -99,8 +99,10 @@ self.addEventListener('fetch', (event) => {
           console.warn('Share target parse error', e)
         }
         if (!sharedUrl) sharedUrl = resolveSharedUrl(sharedUrl, title, text)
+        const hasContent = sharedUrl || title || text
+        if (!hasContent) return
 
-        const payload = { url: sharedUrl, title, text }
+        const payload = { url: sharedUrl || '', title, text }
         const cache = await caches.open(SHARE_PENDING_CACHE)
         await cache.put(
           fullPendingUrl,
