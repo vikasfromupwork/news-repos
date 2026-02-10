@@ -49,6 +49,7 @@ onMounted(async () => {
         if (!url && text && (text.startsWith('http://') || text.startsWith('https://'))) url = text.trim()
         if (url || title || text) {
           addSharedArticle({ url: url || '', title, text })
+          sessionStorage.setItem('news-repos-just-saved', '1')
         }
       }
     } catch (_) {
@@ -58,6 +59,7 @@ onMounted(async () => {
           title: params.get('title') || '',
           text: params.get('text') || '',
         })
+        sessionStorage.setItem('news-repos-just-saved', '1')
       }
     }
     window.history.replaceState({}, '', '/')
@@ -68,6 +70,7 @@ onMounted(async () => {
       title: params.get('title') || '',
       text: params.get('text') || '',
     })
+    sessionStorage.setItem('news-repos-just-saved', '1')
     window.history.replaceState({}, '', window.location.pathname || '/')
     router.replace('/')
   }

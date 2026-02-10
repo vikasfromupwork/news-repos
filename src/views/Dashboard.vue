@@ -6,9 +6,15 @@ import { getSharedArticles, addSharedArticle } from '../storage/sharedArticles'
 const router = useRouter()
 const sharedArticles = ref([])
 const pasteStatus = ref('') // '' | 'ok' | 'fail' | 'empty'
+const justSaved = ref(false)
 
 onMounted(() => {
   sharedArticles.value = getSharedArticles()
+  if (sessionStorage.getItem('news-repos-just-saved')) {
+    justSaved.value = true
+    sessionStorage.removeItem('news-repos-just-saved')
+    setTimeout(() => { justSaved.value = false }, 4000)
+  }
 })
 
 function isUrl(s) {
@@ -40,6 +46,9 @@ async function pasteAndSave() {
 
 <template>
   <div class="nr-page">
+    <section v-if="justSaved" class="nr-card nr-card-saved">
+      <p class="nr-saved-msg">✓ Saved to News Repos. You can switch back to the other app.</p>
+    </section>
     <section class="nr-card nr-card-hero">
       <h2>Quick add article</h2>
       <p class="nr-muted">Paste a news article URL to save and read later.</p>
@@ -103,6 +112,15 @@ async function pasteAndSave() {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+.nr-card-saved {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+.nr-saved-msg {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #86efac;
 }
 .nr-card-hero {
   background: linear-gradient(135deg, #0ea5e9 0%, #008b6b 100%);

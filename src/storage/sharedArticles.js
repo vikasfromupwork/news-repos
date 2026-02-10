@@ -25,8 +25,26 @@ export function getSharedArticles() {
 }
 
 /**
+ * Derive a display title when app sends only text/url (e.g. Twitter sends text, no title).
+ */
+function deriveTitle(payload) {
+  const title = (payload.title || '').trim()
+  if (title) return title
+  const text = (payload.text || '').trim()
+  const url = (payload.url || '').trim()
+  if (text) {
+    const isUrl = (s) => s.startsWith('http://') || s.startsWith('https://')
+    if (isUrl(text) && !url) return text
+    const firstLine = text.split(/\r?\n/)[0].trim()
+    const snippet = firstLine.length > 80 ? firstLine.slice(0, 80).trim() + '…' : firstLine
+    return snippet || url || 'Shared link'
+  }
+  return url || 'Shared link'
+}
+
+/**
  * Save a new shared article and return the full list.
- * @param {{ url: string, title?: string, text?: string }} payload
+ * @param {{ url?: string, title?: string, text?: string }} payload
  * @returns {SharedArticle[]}
  */
 export function addSharedArticle(payload) {
@@ -35,7 +53,7 @@ export function addSharedArticle(payload) {
   const item = {
     id,
     url: payload.url || '',
-    title: payload.title || '',
+    title: deriveTitle(payload),
     text: payload.text || '',
     sharedAt: Date.now(),
   }
