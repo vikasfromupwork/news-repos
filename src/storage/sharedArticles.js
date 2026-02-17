@@ -7,6 +7,9 @@ const STORAGE_KEY = 'news-repos-shared-articles'
  * @property {string} title
  * @property {string} text
  * @property {number} sharedAt
+ * @property {string} [comment]
+ * @property {string} [tagLevel1]
+ * @property {string} [tagLevel2]
  */
 
 /**
@@ -44,7 +47,7 @@ function deriveTitle(payload) {
 
 /**
  * Save a new shared article and return the full list.
- * @param {{ url?: string, title?: string, text?: string }} payload
+ * @param {{ url?: string, title?: string, text?: string, comment?: string, tagLevel1?: string, tagLevel2?: string }} payload
  * @returns {SharedArticle[]}
  */
 export function addSharedArticle(payload) {
@@ -53,10 +56,12 @@ export function addSharedArticle(payload) {
   const item = {
     id,
     url: payload.url || '',
-    title: deriveTitle(payload),
-    text: payload.text || '',
+    title: (payload.title && payload.title.trim()) ? payload.title.trim() : deriveTitle(payload),
+    text: (payload.text ?? payload.comment ?? '').trim(),
     sharedAt: Date.now(),
   }
+  if (payload.tagLevel1 !== undefined && (payload.tagLevel1 || '').trim()) item.tagLevel1 = (payload.tagLevel1 || '').trim()
+  if (payload.tagLevel2 !== undefined && (payload.tagLevel2 || '').trim()) item.tagLevel2 = (payload.tagLevel2 || '').trim()
   list.unshift(item)
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list))

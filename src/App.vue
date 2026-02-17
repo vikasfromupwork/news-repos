@@ -1,11 +1,13 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useRouter, RouterView } from 'vue-router'
+import { onMounted, ref, computed } from 'vue'
+import { useRouter, useRoute, RouterView } from 'vue-router'
 import { addSharedArticle } from './storage/sharedArticles'
 
 const showInstallFab = ref(false)
 let deferredPrompt = null
 const router = useRouter()
+const route = useRoute()
+const hideLayout = computed(() => !!route.meta.hideLayout)
 
 function saveSharedAndGo(payload) {
   if (payload && payload.url) {
@@ -98,44 +100,46 @@ const handleInstallClick = async () => {
 
 <template>
   <div class="nr-root">
-    <header class="nr-topbar">
-      <div class="nr-topbar-inner">
-        <router-link to="/" class="nr-brand">
-          <span class="nr-brand-mark">NR</span>
-          <div>
-            <div class="nr-brand-title">News Repos</div>
-            <div class="nr-brand-subtitle">Private Reader</div>
-          </div>
-        </router-link>
-        <div class="nr-topbar-actions">
-          <button
-            v-if="showInstallFab"
-            type="button"
-            class="nr-install-btn"
-            @click="handleInstallClick"
-            aria-label="Install app"
-          >
-            <span class="nr-install-icon">⬇</span>
-            <span class="nr-install-label">Install</span>
-          </button>
-          <div class="nr-user-pill">
-            <span class="nr-user-badge">Reader</span>
+    <template v-if="!hideLayout">
+      <header class="nr-topbar">
+        <div class="nr-topbar-inner">
+          <router-link to="/" class="nr-brand">
+            <span class="nr-brand-mark">NR</span>
+            <div>
+              <div class="nr-brand-title">News Repos</div>
+              <div class="nr-brand-subtitle">Private Reader</div>
+            </div>
+          </router-link>
+          <div class="nr-topbar-actions">
+            <button
+              v-if="showInstallFab"
+              type="button"
+              class="nr-install-btn"
+              @click="handleInstallClick"
+              aria-label="Install app"
+            >
+              <span class="nr-install-icon">⬇</span>
+              <span class="nr-install-label">Install</span>
+            </button>
+            <div class="nr-user-pill">
+              <span class="nr-user-badge">Reader</span>
+            </div>
           </div>
         </div>
-      </div>
-      <nav class="nr-nav">
-        <router-link to="/" class="nr-nav-link">Dashboard</router-link>
-        <router-link to="/add" class="nr-nav-link">Add Article</router-link>
-        <router-link to="/articles" class="nr-nav-link">Articles</router-link>
-      </nav>
-    </header>
+        <nav class="nr-nav">
+          <router-link to="/" class="nr-nav-link">Dashboard</router-link>
+          <router-link to="/add" class="nr-nav-link">Add Article</router-link>
+          <router-link to="/articles" class="nr-nav-link">Articles</router-link>
+        </nav>
+      </header>
+    </template>
 
-    <main class="nr-main">
+    <main class="nr-main" :class="{ 'nr-main-full': hideLayout }">
       <RouterView />
     </main>
 
     <button
-      v-if="showInstallFab"
+      v-if="showInstallFab && !hideLayout"
       class="nr-install-fab"
       @click="handleInstallClick"
       aria-label="Install News Repos"
@@ -277,6 +281,10 @@ const handleInstallClick = async () => {
   padding: 1rem 0.75rem 5rem;
   width: 100%;
   min-height: 0;
+}
+.nr-main-full {
+  max-width: none;
+  padding: 0;
 }
 .nr-install-fab {
   position: fixed;

@@ -35,7 +35,7 @@ function resolveSharedUrl(urlParam, titleParam, textParam) {
   return ''
 }
 
-// Handle Web Share Target POST: store payload in cache, redirect to /?shared=1
+// Handle Web Share Target: store payload in cache, redirect to /share
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
   const origin = url.origin
@@ -60,7 +60,7 @@ self.addEventListener('fetch', (event) => {
               headers: { 'Content-Type': 'application/json' },
             }),
           )
-          return Response.redirect('/?shared=1', 303)
+          return Response.redirect('/share', 303)
         })(),
       )
     }
@@ -110,7 +110,7 @@ self.addEventListener('fetch', (event) => {
             headers: { 'Content-Type': 'application/json' },
           }),
         )
-        return Response.redirect('/?shared=1', 303)
+        return Response.redirect('/share', 303)
       })(),
     )
     return

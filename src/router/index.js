@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import AddArticle from '../views/AddArticle.vue'
 import Articles from '../views/Articles.vue'
+import ShareView from '../views/ShareView.vue'
 
 const routes = [
   { path: '/', name: 'Dashboard', component: Dashboard },
   { path: '/add', name: 'AddArticle', component: AddArticle },
   { path: '/articles', name: 'Articles', component: Articles },
+  { path: '/share', name: 'Share', component: ShareView, meta: { hideLayout: true } },
 ]
 
 const router = createRouter({
